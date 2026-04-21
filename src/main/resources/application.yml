@@ -4,6 +4,87 @@ server:
 spring:
   application:
     name: fintracking-gateway
+  cloud:
+    gateway:
+      server:
+        default-filters:
+          - name: GlobalFilter
+            args:
+              baseMessage: Spring Cloud Gateway Global Filter
+              preLogger: true
+              postLogger: true
+        webflux:
+          routes:
+            - id: fintracking-auth
+              uri: lb://FINTRACKING-AUTH
+              predicates:
+                - Path=/auth-service/**
+            - id: fintracking-auth-docs
+              uri: lb://FINTRACKING-AUTH
+              predicates:
+                - Path=/v3/api-docs/auth-service
+              filters:
+                - RewritePath=/v3/api-docs/auth-service, /v3/api-docs
+
+            - id: fintracking-account
+              uri: lb://FINTRACKING-ACCOUNT
+              predicates:
+                - Path=/account-service/**
+            - id: fintracking-account-docs
+              uri: lb://FINTRACKING-ACCOUNT
+              predicates:
+                - Path=/v3/api-docs/account-service
+              filters:
+                - RewritePath=/v3/api-docs/account-service, /v3/api-docs
+
+            - id: fintracking-transaction
+              uri: lb://FINTRACKING-TRANSACTION
+              predicates:
+                - Path=/transaction-service/**
+            - id: fintracking-transaction-docs
+              uri: lb://FINTRACKING-TRANSACTION
+              predicates:
+                - Path=/v3/api-docs/transaction-service
+              filters:
+                - RewritePath=/v3/api-docs/transaction-service, /v3/api-docs
+
+            - id: fintracking-budget
+              uri: lb://FINTRACKING-BUDGET
+              predicates:
+                - Path=/budget-service/**
+            - id: fintracking-budget-docs
+              uri: lb://FINTRACKING-BUDGET
+              predicates:
+                - Path=/v3/api-docs/budget-service
+              filters:
+                - RewritePath=/v3/api-docs/budget-service, /v3/api-docs
+
+            - id: fintracking-notification
+              uri: lb://FINTRACKING-NOTIFICATION
+              predicates:
+                - Path=/notification-service/**
+            - id: fintracking-notification-docs
+              uri: lb://FINTRACKING-NOTIFICATION
+              predicates:
+                - Path=/v3/api-docs/notification-service
+              filters:
+                - RewritePath=/v3/api-docs/notification-service, /v3/api-docs
+
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: auth-service
+        url: /v3/api-docs/auth-service
+      - name: account-service
+        url: /v3/api-docs/account-service
+      - name: transaction-service
+        url: /v3/api-docs/transaction-service
+      - name: budget-service
+        url: /v3/api-docs/budget-service
+      - name: notification-service
+        url: /v3/api-docs/notification-service
+    use-root-path: true
 
 eureka:
   client:
@@ -11,3 +92,8 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+jwt:
+  secret: ${key.jwt}
+  access-expiration: 3600000      # 1시간 (ms)
+  refresh-expiration: 604800000   # 7일 (ms)
