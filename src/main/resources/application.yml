@@ -16,6 +16,8 @@ spring:
               uri: lb://FINTRACKING-AUTH
               predicates:
                 - Path=/auth-service/**
+              filters:
+                - StripPrefix=1
             - id: fintracking-auth-docs
               uri: lb://FINTRACKING-AUTH
               predicates:
@@ -27,6 +29,9 @@ spring:
               uri: lb://FINTRACKING-ACCOUNT
               predicates:
                 - Path=/account-service/**
+              filters:
+                - StripPrefix=1
+                - AuthorizationHeaderFilter
             - id: fintracking-account-docs
               uri: lb://FINTRACKING-ACCOUNT
               predicates:
@@ -38,6 +43,9 @@ spring:
               uri: lb://FINTRACKING-TRANSACTION
               predicates:
                 - Path=/transaction-service/**
+              filters:
+                - StripPrefix=1
+                - AuthorizationHeaderFilter
             - id: fintracking-transaction-docs
               uri: lb://FINTRACKING-TRANSACTION
               predicates:
@@ -49,6 +57,9 @@ spring:
               uri: lb://FINTRACKING-BUDGET
               predicates:
                 - Path=/budget-service/**
+              filters:
+                - StripPrefix=1
+                - AuthorizationHeaderFilter
             - id: fintracking-budget-docs
               uri: lb://FINTRACKING-BUDGET
               predicates:
@@ -60,6 +71,9 @@ spring:
               uri: lb://FINTRACKING-NOTIFICATION
               predicates:
                 - Path=/notification-service/**
+              filters:
+                - StripPrefix=1
+                - AuthorizationHeaderFilter
             - id: fintracking-notification-docs
               uri: lb://FINTRACKING-NOTIFICATION
               predicates:
