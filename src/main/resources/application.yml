@@ -18,6 +18,10 @@ spring:
                 - Path=/auth-service/**
               filters:
                 - StripPrefix=1
+                - name: CircuitBreaker
+                  args:
+                    name: authCB
+                    fallbackUri: forward:/fallback/auth
             - id: fintracking-auth-docs
               uri: lb://FINTRACKING-AUTH
               predicates:
@@ -32,6 +36,10 @@ spring:
               filters:
                 - StripPrefix=1
                 - AuthorizationHeaderFilter
+                - name: CircuitBreaker
+                  args:
+                    name: accountCB
+                    fallbackUri: forward:/fallback/account
             - id: fintracking-account-docs
               uri: lb://FINTRACKING-ACCOUNT
               predicates:
@@ -46,6 +54,10 @@ spring:
               filters:
                 - StripPrefix=1
                 - AuthorizationHeaderFilter
+                - name: CircuitBreaker
+                  args:
+                    name: transactionCB
+                    fallbackUri: forward:/fallback/transaction
             - id: fintracking-transaction-docs
               uri: lb://FINTRACKING-TRANSACTION
               predicates:
@@ -60,6 +72,10 @@ spring:
               filters:
                 - StripPrefix=1
                 - AuthorizationHeaderFilter
+                - name: CircuitBreaker
+                  args:
+                    name: budgetCB
+                    fallbackUri: forward:/fallback/budget
             - id: fintracking-budget-docs
               uri: lb://FINTRACKING-BUDGET
               predicates:
@@ -74,6 +90,10 @@ spring:
               filters:
                 - StripPrefix=1
                 - AuthorizationHeaderFilter
+                - name: CircuitBreaker
+                  args:
+                    name: notificationCB
+                    fallbackUri: forward:/fallback/notification
             - id: fintracking-notification-docs
               uri: lb://FINTRACKING-NOTIFICATION
               predicates:
