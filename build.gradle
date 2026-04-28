@@ -52,6 +52,13 @@ dependencies {
     //    Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.8'
 
+    //    Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //    Micrometer Tracing (Zipkin)
+    implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+    implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
