@@ -122,3 +122,60 @@ springdoc:
 jwt:
   access-expiration: 3600000    # 1시간 (ms)
   refresh-expiration: 604800000 # 7일 (ms)
+
+# ──────────────────────────────────────────────────────────────
+# Resilience4J — Circuit Breaker + TimeLimiter 명시적 설정
+# TimeLimiter: 각 서비스 응답 대기 타임아웃
+# CircuitBreaker: 장애 감지 및 차단 정책
+# ──────────────────────────────────────────────────────────────
+resilience4j:
+  timelimiter:
+    instances:
+      authCB:
+        timeoutDuration: 3s       # 인증 서비스 (JWT 발급/검증, 빠른 응답 기대)
+      accountCB:
+        timeoutDuration: 4s       # 계좌 서비스 (DB 조회)
+      transactionCB:
+        timeoutDuration: 5s       # 거래 서비스 (DB + Kafka 발행)
+      budgetCB:
+        timeoutDuration: 4s       # 예산 서비스 (DB 조회)
+      notificationCB:
+        timeoutDuration: 4s       # 알림 서비스 (비동기 발송)
+
+  circuitbreaker:
+    instances:
+      authCB:
+        slidingWindowSize: 10               # 최근 10회 호출 기준으로 상태 평가
+        failureRateThreshold: 50            # 실패율 50% 초과 시 OPEN
+        waitDurationInOpenState: 10s        # OPEN 후 10초 대기 후 HALF_OPEN 전환
+        permittedNumberOfCallsInHalfOpenState: 3  # HALF_OPEN 상태에서 허용할 테스트 호출 수
+        slowCallDurationThreshold: 3s       # 3초 초과 응답을 slowCall로 분류
+        slowCallRateThreshold: 80           # slowCall 비율 80% 초과 시 OPEN
+      accountCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 4s
+        slowCallRateThreshold: 80
+      transactionCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 5s
+        slowCallRateThreshold: 80
+      budgetCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 4s
+        slowCallRateThreshold: 80
+      notificationCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 4s
+        slowCallRateThreshold: 80
